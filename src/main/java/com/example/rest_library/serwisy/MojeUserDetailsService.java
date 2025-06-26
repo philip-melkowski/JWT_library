@@ -28,6 +28,7 @@ public class MojeUserDetailsService implements UserDetailsService {
                 () ->
                 new UsernameNotFoundException("Nie znaleziono!")
                 );
+        // 3 argument to lista uprawnien, tutaj zwraca USER/ADMIN.
             return new org.springframework.security.core.userdetails.User(uzytkownik.getUsername(), uzytkownik.getPassword(), List.of(new SimpleGrantedAuthority(uzytkownik.getRola())));
 
 
