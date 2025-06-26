@@ -50,6 +50,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 // po tej linii Spring traktuje uzytkownika jako zalogowanego
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+            else
+            {
+                System.out.println("Brak/niepoprawny token!");
+            }
 
         }
         catch (Exception e)

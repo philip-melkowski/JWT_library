@@ -113,6 +113,8 @@ public class KsiazkaController {
     public List<KsiazkaDTO> findByUzytkownikUsernameAndPrzeczytaneFalse()
     {
         Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Logged in as: " + authentication.getName());
+        System.out.println("Authorities: " + authentication.getAuthorities());
         String username = authentication.getName();
         return ksiazkaService.findByUzytkownikUsernameAndPrzeczytaneFalse(username).stream().map(k -> new KsiazkaDTO(k, przeczytaneService.sredniaOcenKsiazkiById(k.getId()))).collect(Collectors.toList());
     }
