@@ -1,0 +1,13 @@
+# === BACKEND ===
+/backend/target/
+/backend/.idea/
+/backend/.mvn/
+/backend/mvnw*
+
+# === FRONTEND ===
+/frontend/node_modules/
+/frontend/build/
+
+# === SYSTEMOWE / INNE ===
+.DS_Store
+*.log
