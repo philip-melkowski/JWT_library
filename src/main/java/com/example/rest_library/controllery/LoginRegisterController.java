@@ -5,6 +5,7 @@ import com.example.rest_library.DTO.LoginRequestDTO;
 import com.example.rest_library.JWT_SECURITY.JwtUtil;
 import com.example.rest_library.encje.Uzytkownik;
 import com.example.rest_library.repo.UzytkownikRepository;
+import com.example.rest_library.serwisy.UzytkownikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class LoginRegisterController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UzytkownikRepository uzytkownikRepository;
+    private UzytkownikService uzytkownikService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -51,11 +52,11 @@ public class LoginRegisterController {
     // rejestracja
     @PostMapping("/api/auth/register")
     public ResponseEntity<String> register(@RequestBody Uzytkownik uzytkownik) {
-        if(uzytkownikRepository.existsUzytkownikByUsername(uzytkownik.getUsername()))
+        if(uzytkownikService.existsByUsername(uzytkownik.getUsername()))
         {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("istnieje juz taki uzytkownik");;
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("istnieje juz taki uzytkownik");
         }
-        uzytkownikRepository.save(uzytkownik);
+        uzytkownikService.save(uzytkownik);
         return ResponseEntity.status(HttpStatus.CREATED).body("konto zostalo stworzone");
     }
 }

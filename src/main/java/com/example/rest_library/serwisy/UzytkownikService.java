@@ -38,5 +38,5 @@ public class UzytkownikService {
     }
     public List<Uzytkownik> findAll() { return uzytkownikRepository.findAll();}
 
-    public boolean existsByUsername(String username) { return uzytkownikRepository.findByUsername(username).isPresent();}
+    public boolean existsByUsername(String username) { return uzytkownikRepository.existsUzytkownikByUsername(username); }
 }
