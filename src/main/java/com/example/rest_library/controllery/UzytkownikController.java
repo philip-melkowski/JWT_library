@@ -30,6 +30,7 @@ public class UzytkownikController {
     private AuthenticationManager authenticationManager;
 
 
+    /* zbedne w JWT bo rejestrujemy sie przez endpoint api/auth/register
     // 1. dodaj uzytkownika
     @PostMapping
     public ResponseEntity<?> addUzytkownik(@RequestBody Uzytkownik uzytkownik)
@@ -44,6 +45,8 @@ public class UzytkownikController {
         uzytkownikService.save(savedUzytkownik);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUzytkownik);
     }
+
+     */
 
     /*
     // 2. dodaj uzytkownika i zwroc jego adres

@@ -3,7 +3,10 @@ package com.example.rest_library.controllery;
 
 import com.example.rest_library.DTO.LoginRequestDTO;
 import com.example.rest_library.JWT_SECURITY.JwtUtil;
+import com.example.rest_library.encje.Uzytkownik;
+import com.example.rest_library.repo.UzytkownikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,8 +24,12 @@ public class LoginRegisterController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private UzytkownikRepository uzytkownikRepository;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
+    // logowanie
     @PostMapping("/api/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
@@ -39,5 +46,16 @@ public class LoginRegisterController {
 
         // zwroc token
         return ResponseEntity.ok(jwt);
+    }
+
+    // rejestracja
+    @PostMapping("/api/auth/register")
+    public ResponseEntity<String> register(@RequestBody Uzytkownik uzytkownik) {
+        if(uzytkownikRepository.existsUzytkownikByUsername(uzytkownik.getUsername()))
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("istnieje juz taki uzytkownik");;
+        }
+        uzytkownikRepository.save(uzytkownik);
+        return ResponseEntity.status(HttpStatus.CREATED).body("konto zostalo stworzone");
     }
 }
