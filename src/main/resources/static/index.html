@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <title>GoodReads ale wersja biedacka</title>
+</head>
+<body class="container">
+    <h1>Witaj w GudRids</h1>
+    <form method="POST" action="/login">
+    <label for="username">Nazwa użytkownika:</label>
+    <input type="text" id="username" name="username" />
+    <label for="password">Hasło:</label>
+    <input type="text" id="password" name="password" />
+    <div class="przyciski">
+    <button type="submit">Zaloguj się</button>
+
+
+    </div>
+        <p id="error" style="color: red"></p>
+        </form>
+    <button onclick="window.location.href = '/rejestracja.html'">Zarejestruj się</button>
+
+
+</body>
+</html>
