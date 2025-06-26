@@ -32,7 +32,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try
         {
             String jwt = parseJwt(request); // pobierz token z naglowka Authentication w żądaniu
-            if(jwt != null && jwtUtil.validateJwtToken(jwt)) // sprawdz czy zwrocilo token i czy jest VALID
+            if(jwtUtil.validateJwtToken(jwt) && jwt != null) // sprawdz czy zwrocilo token i czy jest VALID
             {
                 String username = jwtUtil.getUsernameFromToken(jwt); // wyciagnij z tokenu nazwe uzyt
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);  // laduje dane uzytkownika z bazy na podstawie loginu. zwraca obiekt UserDetails
