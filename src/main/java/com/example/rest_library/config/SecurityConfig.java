@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.http.HttpMethod.POST;
 
@@ -37,7 +39,8 @@ public class SecurityConfig {
     {
         http
                 .csrf(csrf -> csrf.disable()) // Wyłączenie ochrony CSRF — przydatne przy API REST lub gdy nie używasz formularzy
-                .cors(cors -> cors.disable())
+                //.cors(cors -> cors.disable()) // wylaczone bo przy REACT (port 3000) komunikujacym sie z serwerem (8080) musi byc skonfigurowane cors
+                .cors(Customizer.withDefaults()) // taki arg -> szuka mojego beana od cors config
                 // niepotrzebne po przejsciu na JWT
                 /*
                 .formLogin(form -> form
@@ -53,7 +56,7 @@ public class SecurityConfig {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 }))
 
-                // zakomentowane - te co niepotrzebne po przejsciu na JWT
+                // zakomentowane - te co niepotrzebne po przejściu na JWT
                 .authorizeHttpRequests( auth -> auth// ustalamy ktore sciezki wymagaja logowania
 
 
@@ -83,5 +86,20 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception
     {
         return config.getAuthenticationManager();
+    }
+
+    // konfiguracja cors
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("*")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
     }
 }
