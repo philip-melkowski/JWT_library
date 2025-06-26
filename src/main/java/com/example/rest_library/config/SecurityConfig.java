@@ -35,6 +35,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Wyłączenie ochrony CSRF — przydatne przy API REST lub gdy nie używasz formularzy
                 .cors(cors -> cors.disable())
+                // niepotrzebne po przejsciu na JWT
                 /*
                 .formLogin(form -> form
                         .loginPage("/index.html") // strona logowania
@@ -42,13 +43,19 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/uzytkownik.html", true) // strona po zalogowaniu
                         .permitAll()) // permit all
                 */
+                // serwer nie przechowuje zadnych informacji typu login, haslo. uzytkownik po swojej stronie trzyma token i to nim jest
+                // weryfikowany gdy wysyła żadanie
                 .sessionManagement((session ->
                 {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 }))
+
+                // zakomentowane - te co niepotrzebne po przejsciu na JWT
                 .authorizeHttpRequests( auth -> auth// ustalamy ktore sciezki wymagaja logowania
 
-                        .requestMatchers("/", "/index.html", "/rejestracja.html").permitAll() // bez aut
+
+                        //.requestMatchers("/", "/index.html", "/rejestracja.html").permitAll() // bez aut
+                        .requestMatchers("/api/auth/login").permitAll() // JWT logowanie
                         .requestMatchers( "/dodajKsiazke.html", "/dodajAutora.html").hasRole("ADMIN") //
                         .requestMatchers(POST, "/api/autorzy", "/api/ksiazki").hasRole("ADMIN") // tylko admin moze dodac ksiazke lub autora do bazy
                         .requestMatchers("/api/**").permitAll() // wszystkie endpointy API na razie dostepn poza dodaniem ksiazki i autora

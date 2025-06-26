@@ -12,11 +12,11 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    @Value("${jws.secret}")
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jws.expiration}")
-    private int jwtExpirationMs;
+    @Value("${jwt.expiration}")
+    private int jwtExpirationMs; // jak dlugo bedzie wazny token
 
     private SecretKey key;
 

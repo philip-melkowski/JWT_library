@@ -24,6 +24,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private MojeUserDetailsService userDetailsService;
 
+
+    // filtr dziala zanim dotrze do jakiegokolwiek kontrolera przez endpoint
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
