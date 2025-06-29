@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 interface FormLoginProps {
-  onLogin: (token: string) => void;
+  onLogin: () => void;
 }
 
 const FormLogin = ({ onLogin }: FormLoginProps) => {
@@ -19,7 +19,8 @@ const FormLogin = ({ onLogin }: FormLoginProps) => {
       });
       if (reponse.ok) {
         const token = await reponse.text();
-        onLogin(token);
+        sessionStorage.setItem("token", token);
+        onLogin();
       } else {
         setBlad("niepoprawny login lub haslo!");
       }

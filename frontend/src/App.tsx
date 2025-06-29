@@ -3,7 +3,9 @@ import FormLogin from "./components/FormLogin";
 import { useState } from "react";
 
 function App() {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(
+    sessionStorage.getItem("token")
+  );
 
   return (
     <>
@@ -11,7 +13,9 @@ function App() {
         {token ? (
           <p>Zalogowano! Token: {token}</p>
         ) : (
-          <FormLogin onLogin={(t) => setToken(t)}></FormLogin>
+          <FormLogin
+            onLogin={() => setToken(sessionStorage.getItem("token"))}
+          />
         )}
         <p>hello</p>
       </div>
