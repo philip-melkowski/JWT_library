@@ -4,7 +4,6 @@ package com.example.rest_library.controllery;
 import com.example.rest_library.DTO.LoginRequestDTO;
 import com.example.rest_library.JWT_SECURITY.JwtUtil;
 import com.example.rest_library.encje.Uzytkownik;
-import com.example.rest_library.repo.UzytkownikRepository;
 import com.example.rest_library.serwisy.UzytkownikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
