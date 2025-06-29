@@ -26,4 +26,6 @@ public class Uzytkownik {
 
     private String rola;
 
+
+
 }

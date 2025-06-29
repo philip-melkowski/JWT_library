@@ -55,6 +55,8 @@ public class LoginRegisterController {
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("istnieje juz taki uzytkownik");
         }
+        if(uzytkownik.getRola() == null)
+            uzytkownik.setRola("ROLE_USER");
         uzytkownikService.save(uzytkownik);
         return ResponseEntity.status(HttpStatus.CREATED).body("konto zostalo stworzone");
     }
