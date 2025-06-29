@@ -1,11 +1,18 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import FormLogin from "./components/FormLogin";
+import { useState } from "react";
 
 function App() {
+  const [token, setToken] = useState<string | null>(null);
+
   return (
     <>
       <div className="App">
+        {token ? (
+          <p>Zalogowano! Token: {token}</p>
+        ) : (
+          <FormLogin onLogin={(t) => setToken(t)}></FormLogin>
+        )}
         <p>hello</p>
       </div>
     </>
