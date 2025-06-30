@@ -18,6 +18,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
   const [username, setUsername] = useState("");
   const [blad, setBlad] = useState("");
   const [lista, setLista] = useState<PrzeczytanaKsiazka[]>([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     if (token) {
@@ -80,7 +81,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
       })
 
       .catch((err) => setBlad(err.message));
-  }, [token]); // była tez lista - ale wtedy zapletlony fetch, bo za kazdym setLista sie zmienia wiec ponownie fetch
+  }, [token, refreshTrigger]); // była tez lista - ale wtedy zapletlony fetch, bo za kazdym setLista sie zmienia wiec ponownie fetch
 
   return (
     <>
@@ -103,6 +104,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
               <th>Tytuł</th>
               <th>Autor</th>
               <th>Ocena</th>
+              <th>Zmień</th>
             </tr>
           </thead>
           <tbody>
@@ -114,6 +116,63 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
                   {ksiazka.autorImie} {ksiazka.autorNazwisko}
                 </td>
                 <td>{ksiazka.ocena}</td>
+                <td>
+                  <button
+                    onClick={async () => {
+                      try {
+                        const nowa = prompt("Podaj nowa ocenę 1-5: ");
+                        if (nowa != null) {
+                          const nowaNum = parseInt(nowa);
+                          if (
+                            nowaNum != null &&
+                            !isNaN(nowaNum) &&
+                            nowaNum > 0 &&
+                            nowaNum < 6
+                          ) {
+                            const response = await fetch(
+                              "/api/uzytkownicy/getUserId",
+                              {
+                                method: "GET",
+                                headers: {
+                                  Authorization: "Bearer " + token,
+                                },
+                              }
+                            );
+                            if (!response.ok) {
+                              throw new Error(
+                                "blad przy getUserId" + response.status
+                              );
+                            }
+                            const userId = await response.text();
+
+                            const response2 = await fetch("/api/przeczytane", {
+                              method: "PUT",
+                              headers: {
+                                Authorization: "Bearer " + token,
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                uzytkownikId: userId,
+                                ksiazkaId: ksiazka.ksiazkaId,
+                                ocena: nowaNum,
+                              }),
+                            });
+                            if (!response2.ok) {
+                              throw new Error(
+                                "nie udalo sie dodac oceny " + response2.status
+                              );
+                            }
+                            setRefreshTrigger((prev) => prev + 1);
+                          }
+                        }
+                      } catch (e: any) {
+                        setBlad(e.message);
+                      }
+                    }}
+                  >
+                    Zmień
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
