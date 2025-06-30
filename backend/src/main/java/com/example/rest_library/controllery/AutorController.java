@@ -75,7 +75,7 @@ public class AutorController {
 
      */
 
-    // 7. usuna autora na podstawie ID
+    // 7. usuwa autora na podstawie ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAutor(@PathVariable Long id)
     {
@@ -91,6 +91,7 @@ public class AutorController {
         return autor.map(a -> ResponseEntity.ok(new AutorDTO(a))).orElse(ResponseEntity.notFound().build());
     }
 
+    // 9. pokaz autora na podsatwie id ksiazki
     @GetMapping("/autorKsiazki")
     public ResponseEntity<AutorDTO> findByKsiazkaId(@RequestParam Long id)
     {

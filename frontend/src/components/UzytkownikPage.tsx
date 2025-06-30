@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import WylogujButton from "./WylogujButton";
 
 interface PrzeczytanaKsiazka {
-  uzytkownikId: number;
-  uzytkownikUsername: string;
   ksiazkaId: number;
   ksiazkaTytul: string;
   ocena: number;
+  autorImie: string;
+  autorNazwisko: string;
 }
 
 interface UzytkownikPageProps {
@@ -47,9 +47,40 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
           setBlad("jakis blad");
         }
       })
-      .then(setLista)
+      .then(async (ksiazki) => {
+        const ksiazkiZAutorami = [];
+
+        for (const k of ksiazki) {
+          const responseAutor = await fetch(
+            `/api/autorzy/autorKsiazki?id=${k.ksiazkaId}`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + token,
+              },
+            }
+          );
+          if (!responseAutor.ok) {
+            throw new Error(
+              "Nie znaleziono autora dla książki o ID " + k.ksiazkaId
+            );
+          }
+          const autor = await responseAutor.json();
+
+          ksiazkiZAutorami.push({
+            ksiazkaId: k.ksiazkaId,
+            ksiazkaTytul: k.ksiazkaTytul,
+            ocena: k.ocena,
+            autorImie: autor.imie,
+            autorNazwisko: autor.nazwisko,
+          });
+        }
+        setLista(ksiazkiZAutorami);
+      })
+
       .catch((err) => setBlad(err.message));
-  }, [token, lista]);
+  }, [token]); // była tez lista - ale wtedy zapletlony fetch, bo za kazdym setLista sie zmienia wiec ponownie fetch
 
   return (
     <>
@@ -79,7 +110,9 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
               <tr key={ksiazka.ksiazkaId}>
                 <td>{ksiazka.ksiazkaId}</td>
                 <td>{ksiazka.ksiazkaTytul}</td>
-                <td>{ksiazka.uzytkownikUsername}</td>
+                <td>
+                  {ksiazka.autorImie} {ksiazka.autorNazwisko}
+                </td>
                 <td>{ksiazka.ocena}</td>
               </tr>
             ))}
