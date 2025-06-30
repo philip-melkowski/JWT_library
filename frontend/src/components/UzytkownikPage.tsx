@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import WylogujButton from "./WylogujButton";
+import AdminLinks from "./AdminLinks";
 
 interface PrzeczytanaKsiazka {
   ksiazkaId: number;
@@ -88,6 +89,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
   return (
     <>
       <WylogujButton onLogOut={onLogOut}></WylogujButton>
+      <AdminLinks></AdminLinks>
       <div style={{ padding: "20px", color: "white" }}>
         <h1>Witaj, {username}</h1>
       </div>
