@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 public class LoginRegisterController {
 
@@ -37,12 +40,14 @@ public class LoginRegisterController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(), loginRequestDTO.getPassword())
         );
+        List<String> roles = authentication.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList()); // role
+
 
         // ustawienie uzytkownika jako zalogowanego w kontekscie Spring Security
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // generuje token
-        String jwt = jwtUtil.generateToken(((UserDetails) authentication.getPrincipal()).getUsername());
+        String jwt = jwtUtil.generateToken(((UserDetails) authentication.getPrincipal()).getUsername(), roles);
 
         // zwroc token
         return ResponseEntity.ok(jwt);

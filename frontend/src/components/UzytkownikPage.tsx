@@ -24,6 +24,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
   useEffect(() => {
     if (token) {
       const payload = JSON.parse(atob(token.split(".")[1]));
+      console.log(payload.roles);
       setUsername(payload.sub || payload.username);
     }
     if (!token) {
@@ -122,7 +123,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
                 return (k.autorImie + " " + k.autorNazwisko)
                   .toLowerCase()
                   .includes(filtrAutor.trim().toLowerCase());
-              })
+              }) // nie ma tu potrzeby renderowania za kazdym razem, bo zmiana stanu filtrAutor zapewnia renderowanie
               .map((ksiazka) => (
                 <tr key={ksiazka.ksiazkaId}>
                   <td>{ksiazka.ksiazkaId}</td>
