@@ -15,14 +15,15 @@ interface UzytkownikPageProps {
 
 const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
   const token = sessionStorage.getItem("token");
-  let username = "";
+  const [username, setUsername] = useState("");
   const [blad, setBlad] = useState("");
   const [lista, setLista] = useState<PrzeczytanaKsiazka[]>([]);
-  if (token) {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    username = payload.sub || payload.username;
-  }
+
   useEffect(() => {
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setUsername(payload.sub || payload.username);
+    }
     if (!token) {
       setBlad("brak tokenu");
       return;
@@ -48,7 +49,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
       })
       .then(setLista)
       .catch((err) => setBlad(err.message));
-  }, [token]);
+  }, [token, lista]);
 
   return (
     <>
