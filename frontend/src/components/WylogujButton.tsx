@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "tailwindcss";
 
 interface WylogujButtonProps {
   onLogOut: () => void;
@@ -16,7 +17,9 @@ const WylogujButton = ({ onLogOut }: WylogujButtonProps) => {
 
   return (
     <div>
-      <button onClick={handleLogout}>Wyloguj</button>
+      <button className="btn btn-danger" onClick={handleLogout}>
+        Wyloguj
+      </button>
     </div>
   );
 };

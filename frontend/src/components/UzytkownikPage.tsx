@@ -19,6 +19,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
   const [blad, setBlad] = useState("");
   const [lista, setLista] = useState<PrzeczytanaKsiazka[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [filtrAutor, setFiltrAutor] = useState("");
 
   useEffect(() => {
     if (token) {
@@ -90,6 +91,14 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
         <h1>Witaj, {username}</h1>
       </div>
       {blad && <p style={{ color: "red" }}>{blad}</p>}
+      <input
+        value={filtrAutor}
+        onChange={(e) => {
+          setFiltrAutor(e.target.value);
+        }}
+        type="text"
+        placeholder="Filtruj po autorze"
+      ></input>
       {lista.length > 0 && (
         <table
           style={{
@@ -108,73 +117,84 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
             </tr>
           </thead>
           <tbody>
-            {lista.map((ksiazka) => (
-              <tr key={ksiazka.ksiazkaId}>
-                <td>{ksiazka.ksiazkaId}</td>
-                <td>{ksiazka.ksiazkaTytul}</td>
-                <td>
-                  {ksiazka.autorImie} {ksiazka.autorNazwisko}
-                </td>
-                <td>{ksiazka.ocena}</td>
-                <td>
-                  <button
-                    onClick={async () => {
-                      try {
-                        const nowa = prompt("Podaj nowa ocenę 1-5: ");
-                        if (nowa != null) {
-                          const nowaNum = parseInt(nowa);
-                          if (
-                            nowaNum != null &&
-                            !isNaN(nowaNum) &&
-                            nowaNum > 0 &&
-                            nowaNum < 6
-                          ) {
-                            const response = await fetch(
-                              "/api/uzytkownicy/getUserId",
-                              {
-                                method: "GET",
-                                headers: {
-                                  Authorization: "Bearer " + token,
-                                },
+            {lista
+              .filter((k) => {
+                return (k.autorImie + " " + k.autorNazwisko)
+                  .toLowerCase()
+                  .includes(filtrAutor.trim().toLowerCase());
+              })
+              .map((ksiazka) => (
+                <tr key={ksiazka.ksiazkaId}>
+                  <td>{ksiazka.ksiazkaId}</td>
+                  <td>{ksiazka.ksiazkaTytul}</td>
+                  <td>
+                    {ksiazka.autorImie} {ksiazka.autorNazwisko}
+                  </td>
+                  <td>{ksiazka.ocena}</td>
+                  <td>
+                    <button
+                      className="btn btn-light"
+                      onClick={async () => {
+                        try {
+                          const nowa = prompt("Podaj nowa ocenę 1-5: ");
+                          if (nowa != null) {
+                            const nowaNum = parseInt(nowa);
+                            if (
+                              nowaNum != null &&
+                              !isNaN(nowaNum) &&
+                              nowaNum > 0 &&
+                              nowaNum < 6
+                            ) {
+                              const response = await fetch(
+                                "/api/uzytkownicy/getUserId",
+                                {
+                                  method: "GET",
+                                  headers: {
+                                    Authorization: "Bearer " + token,
+                                  },
+                                }
+                              );
+                              if (!response.ok) {
+                                throw new Error(
+                                  "blad przy getUserId" + response.status
+                                );
                               }
-                            );
-                            if (!response.ok) {
-                              throw new Error(
-                                "blad przy getUserId" + response.status
-                              );
-                            }
-                            const userId = await response.text();
+                              const userId = await response.text();
 
-                            const response2 = await fetch("/api/przeczytane", {
-                              method: "PUT",
-                              headers: {
-                                Authorization: "Bearer " + token,
-                                "Content-Type": "application/json",
-                              },
-                              body: JSON.stringify({
-                                uzytkownikId: userId,
-                                ksiazkaId: ksiazka.ksiazkaId,
-                                ocena: nowaNum,
-                              }),
-                            });
-                            if (!response2.ok) {
-                              throw new Error(
-                                "nie udalo sie dodac oceny " + response2.status
+                              const response2 = await fetch(
+                                "/api/przeczytane",
+                                {
+                                  method: "PUT",
+                                  headers: {
+                                    Authorization: "Bearer " + token,
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    uzytkownikId: userId,
+                                    ksiazkaId: ksiazka.ksiazkaId,
+                                    ocena: nowaNum,
+                                  }),
+                                }
                               );
+                              if (!response2.ok) {
+                                throw new Error(
+                                  "nie udalo sie zmienic oceny " +
+                                    response2.status
+                                );
+                              }
+                              setRefreshTrigger((prev) => prev + 1);
                             }
-                            setRefreshTrigger((prev) => prev + 1);
                           }
+                        } catch (e: any) {
+                          setBlad(e.message);
                         }
-                      } catch (e: any) {
-                        setBlad(e.message);
-                      }
-                    }}
-                  >
-                    Zmień
-                  </button>
-                </td>
-              </tr>
-            ))}
+                      }}
+                    >
+                      Zmień
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       )}
