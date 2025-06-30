@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "../styles/form.scss";
 import { useNavigate } from "react-router-dom";
-import { stringify } from "querystring";
 
 const FormRegister = () => {
   const [username, setUsername] = useState("");

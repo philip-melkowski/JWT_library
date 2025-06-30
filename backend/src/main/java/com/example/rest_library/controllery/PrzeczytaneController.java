@@ -9,6 +9,7 @@ import com.example.rest_library.serwisy.PrzeczytaneService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,6 +43,14 @@ public class PrzeczytaneController {
     @GetMapping("/uzytkownik/username/{username}")
     public List<PrzeczytaneDTO> findByUzytkownikUsername(@PathVariable String username)
     {
+        return przeczytaneService.findByUzytkownikUsername(username).stream().map(PrzeczytaneDTO::new).collect(Collectors.toList());
+    }
+
+    // 3.1. to samo co 3 ale bez usernaem w url
+    @GetMapping("/moje")
+    public List<PrzeczytaneDTO> findPrzeczytane(Authentication authentication)
+    {
+        String username = authentication.getName();
         return przeczytaneService.findByUzytkownikUsername(username).stream().map(PrzeczytaneDTO::new).collect(Collectors.toList());
     }
 

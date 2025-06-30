@@ -3,6 +3,7 @@ import FormLogin from "./components/FormLogin";
 import { useState } from "react";
 import UzytkownikPage from "./components/UzytkownikPage";
 import FormRegister from "./components/FormRegister";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -36,7 +37,9 @@ function App() {
             path="/uzytkownik"
             element={
               token ? (
-                <UzytkownikPage></UzytkownikPage>
+                <UzytkownikPage
+                  onLogOut={() => setToken(null)}
+                ></UzytkownikPage>
               ) : (
                 <Navigate to="/" replace></Navigate>
               )
@@ -44,7 +47,13 @@ function App() {
           ></Route>
           <Route
             path="/register"
-            element={<FormRegister></FormRegister>}
+            element={
+              !token ? (
+                <FormRegister></FormRegister>
+              ) : (
+                <Navigate to="/" replace></Navigate>
+              )
+            }
           ></Route>
           <Route
             path="*"
