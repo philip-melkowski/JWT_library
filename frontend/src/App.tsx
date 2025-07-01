@@ -3,6 +3,7 @@ import FormLogin from "./components/FormLogin";
 import { useState } from "react";
 import UzytkownikPage from "./components/UzytkownikPage";
 import FormRegister from "./components/FormRegister";
+import FormAddBook from "./components/FormAddBook";
 
 import {
   BrowserRouter as Router,
@@ -50,6 +51,16 @@ function App() {
             element={
               !token ? (
                 <FormRegister></FormRegister>
+              ) : (
+                <Navigate to="/" replace></Navigate>
+              )
+            }
+          ></Route>
+          <Route
+            path="/dodaj-ksiazke"
+            element={
+              token ? (
+                <FormAddBook></FormAddBook>
               ) : (
                 <Navigate to="/" replace></Navigate>
               )
