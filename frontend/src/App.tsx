@@ -60,7 +60,7 @@ function App() {
             path="/dodaj-ksiazke"
             element={
               token ? (
-                <FormAddBook></FormAddBook>
+                <FormAddBook onLogOut={() => setToken(null)}></FormAddBook>
               ) : (
                 <Navigate to="/" replace></Navigate>
               )
