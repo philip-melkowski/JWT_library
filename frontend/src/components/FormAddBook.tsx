@@ -22,18 +22,27 @@ const FormAddBook = ({ onLogOut }: FormAddBookProps) => {
 
   useEffect(() => {
     const fetchAutorzy = async () => {
-      const response = await fetch("/api/autorzy", {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-          Accept: "application/json",
-        },
-      });
-      const data = await response.json();
-      setAutorzy(data);
+      try {
+        const response = await fetch("/api/autorzy", {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + token,
+            Accept: "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("nie udalo sie zaladowac autora " + response.status);
+        } else {
+          setBlad("");
+        }
+        const data = await response.json();
+        setAutorzy(data);
+      } catch (e: any) {
+        setBlad(e.message);
+      }
     };
     fetchAutorzy();
-  }, [token]);
+  }, []);
 
   const filteredAutorzy = autorzy
     .filter(

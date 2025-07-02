@@ -11,6 +11,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import FormAddAutor from "./components/FormAddAutor";
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -63,6 +64,16 @@ function App() {
                 <FormAddBook onLogOut={() => setToken(null)}></FormAddBook>
               ) : (
                 <Navigate to="/" replace></Navigate>
+              )
+            }
+          ></Route>
+          <Route
+            path="/dodaj-autora"
+            element={
+              token ? (
+                <FormAddAutor onLogOut={() => setToken(null)}></FormAddAutor>
+              ) : (
+                <Navigate to="/"></Navigate>
               )
             }
           ></Route>
