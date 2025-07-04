@@ -1,9 +1,11 @@
 import React from "react";
-import FormLogin from "./components/FormLogin";
+import FormLogin from "./components/forms/FormLogin";
 import { useState } from "react";
 import UzytkownikPage from "./components/UzytkownikPage";
-import FormRegister from "./components/FormRegister";
-import FormAddBook from "./components/FormAddBook";
+import FormRegister from "./components/forms/FormRegister";
+import FormAddBook from "./components/forms/FormAddBook";
+
+import { jwtDecode } from "jwt-decode";
 
 import {
   BrowserRouter as Router,
@@ -11,7 +13,21 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import FormAddAutor from "./components/FormAddAutor";
+import FormAddAutor from "./components/forms/FormAddAutor";
+import RateBook from "./components/RateBook";
+
+function isRole(token: string | null, rola: string): boolean {
+  if (!token) {
+    return false;
+  }
+  try {
+    const decoded: any = jwtDecode(token);
+    const roles = decoded?.roles || [];
+    return roles.includes(rola);
+  } catch {
+    return false;
+  }
+}
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -60,7 +76,7 @@ function App() {
           <Route
             path="/dodaj-ksiazke"
             element={
-              token ? (
+              token && isRole(token, "ROLE_ADMIN") ? (
                 <FormAddBook onLogOut={() => setToken(null)}></FormAddBook>
               ) : (
                 <Navigate to="/" replace></Navigate>
@@ -70,8 +86,18 @@ function App() {
           <Route
             path="/dodaj-autora"
             element={
-              token ? (
+              token && isRole(token, "ROLE_ADMIN") ? (
                 <FormAddAutor onLogOut={() => setToken(null)}></FormAddAutor>
+              ) : (
+                <Navigate to="/"></Navigate>
+              )
+            }
+          ></Route>
+          <Route
+            path="/dodaj-ocene"
+            element={
+              token ? (
+                <RateBook onLogOut={() => setToken(null)}></RateBook>
               ) : (
                 <Navigate to="/"></Navigate>
               )

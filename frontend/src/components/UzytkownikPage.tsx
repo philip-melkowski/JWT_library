@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import WylogujButton from "./WylogujButton";
-import AdminLinks from "./AdminLinks";
+import WylogujButton from "./buttons/WylogujButton";
+import AdminLinks from "./AdminSegment";
+import { useNavigate } from "react-router-dom";
 
 interface PrzeczytanaKsiazka {
   ksiazkaId: number;
@@ -21,6 +22,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
   const [lista, setLista] = useState<PrzeczytanaKsiazka[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [filtrAutor, setFiltrAutor] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
@@ -88,7 +90,17 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
 
   return (
     <>
-      <WylogujButton onLogOut={onLogOut}></WylogujButton>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <WylogujButton onLogOut={onLogOut}></WylogujButton>
+        <button
+          className="btn btn-info"
+          onClick={() => {
+            navigate("/dodaj-ocene");
+          }}
+        >
+          Oceń przeczytaną ksiązkę
+        </button>
+      </div>
       <AdminLinks></AdminLinks>
       <div style={{ padding: "20px", color: "white" }}>
         <h1>Witaj, {username}</h1>
@@ -116,7 +128,7 @@ const UzytkownikPage = ({ onLogOut }: UzytkownikPageProps) => {
               <th>Tytuł</th>
               <th>Autor</th>
               <th>Ocena</th>
-              <th>Zmień</th>
+              <th style={{ textAlign: "center" }}>Zmień</th>
             </tr>
           </thead>
           <tbody>

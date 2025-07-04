@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import WylogujButton from "./WylogujButton";
+import LogOutAndUserPageSegment from "../LogOutAndUserPageSegment";
 
 interface FormAddBookProps {
   onLogOut: () => void;
@@ -42,7 +42,7 @@ const FormAddBook = ({ onLogOut }: FormAddBookProps) => {
       }
     };
     fetchAutorzy();
-  }, []);
+  }, [token]);
 
   const filteredAutorzy = autorzy
     .filter(
@@ -89,7 +89,7 @@ const FormAddBook = ({ onLogOut }: FormAddBookProps) => {
 
   return (
     <>
-      <WylogujButton onLogOut={onLogOut}></WylogujButton>
+      <LogOutAndUserPageSegment onLogOut={onLogOut}></LogOutAndUserPageSegment>
       <form onSubmit={handleSubmit}>
         <div style={{ color: "white" }}>Dodaj ksiązkę</div>
         <p></p>

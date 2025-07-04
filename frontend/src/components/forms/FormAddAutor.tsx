@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import LogOutAndUserPageSegment from "../LogOutAndUserPageSegment";
 
 interface FormAddAutorProps {
   onLogOut: () => void;
@@ -40,6 +41,7 @@ const FormAddAutor = ({ onLogOut }: FormAddAutorProps) => {
 
   return (
     <>
+      <LogOutAndUserPageSegment onLogOut={onLogOut}></LogOutAndUserPageSegment>
       <h1>Dodaj Autora</h1>
       <form onSubmit={addAuthor}>
         <input
@@ -52,8 +54,9 @@ const FormAddAutor = ({ onLogOut }: FormAddAutorProps) => {
           placeholder="Nazwisko"
           onChange={(e) => setNazwisko(e.target.value)}
         ></input>
-        <button type="submit">Dodaj autora</button>
+        <button type="submit">Dodaj autora§</button>
       </form>
+      {blad && <p style={{ color: "red" }}>{blad}</p>}
     </>
   );
 };

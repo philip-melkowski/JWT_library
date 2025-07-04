@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/form.scss";
+import "../../styles/form.scss";
 import { useNavigate } from "react-router-dom";
 
 const FormRegister = () => {
