@@ -6,6 +6,10 @@ import com.example.rest_library.encje.Ksiazka;
 import com.example.rest_library.serwisy.PrzeczytaneService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -110,13 +114,20 @@ public class KsiazkaController {
 
     // 9. zwroc nieprzeczytane jeszcze
     @GetMapping("/nieprzeczytane")
-    public List<KsiazkaDTO> findByUzytkownikUsernameAndPrzeczytaneFalse()
+    public Page<KsiazkaDTO> findByUzytkownikUsernameAndPrzeczytaneFalse(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "tytul") String sort,
+            @RequestParam(defaultValue = "asc") String dir
+    )
     {
         Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("Logged in as: " + authentication.getName());
-        System.out.println("Authorities: " + authentication.getAuthorities());
         String username = authentication.getName();
-        return ksiazkaService.findByUzytkownikUsernameAndPrzeczytaneFalse(username).stream().map(k -> new KsiazkaDTO(k, przeczytaneService.sredniaOcenKsiazkiById(k.getId()))).collect(Collectors.toList());
+
+        Sort.Direction direction = dir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort));
+
+        return ksiazkaService.findByUzytkownikUsernameAndPrzeczytaneFalse(username, pageable).map(k -> new KsiazkaDTO(k, przeczytaneService.sredniaOcenKsiazkiById(k.getId())));
     }
 
     // 10. sprawdź, czy już istnieje książka autora o takim tytule

@@ -2,6 +2,8 @@ package com.example.rest_library.repo;
 
 import com.example.rest_library.encje.Autor;
 import com.example.rest_library.encje.Ksiazka;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,7 +38,7 @@ public interface KsiazkaRepository extends JpaRepository<Ksiazka, Long> {
 
     // zwraca nieprzeczytane przez uzytkownika ksiazki
     @Query("select k from Ksiazka k where NOT EXISTS (select p from Przeczytane p where p.ksiazka = k and p.uzytkownik.username = :username)")
-    List<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(@Param("username") String username);
+    Page<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(@Param("username") String username, Pageable pageable);
 
     // zwraca srednia ocen dla ksiazki
     @Query("select avg(p.ocena) from Przeczytane p where p.ksiazka.id = :id")

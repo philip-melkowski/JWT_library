@@ -2,6 +2,8 @@ package com.example.rest_library.serwisy;
 
 import com.example.rest_library.encje.Autor;
 import com.example.rest_library.encje.Ksiazka;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.rest_library.repo.KsiazkaRepository;
 
@@ -72,7 +74,7 @@ public class KsiazkaService {
 
     public Optional<Ksiazka> findById(Long id) { return ksiazkaRepository.findById(id);}
 
-    public List<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(String username) { return ksiazkaRepository.findByUzytkownikUsernameAndPrzeczytaneFalse(username);}
+    public Page<Ksiazka> findByUzytkownikUsernameAndPrzeczytaneFalse(String username, Pageable pageable) { return ksiazkaRepository.findByUzytkownikUsernameAndPrzeczytaneFalse(username, pageable);}
 
     public boolean existsByTytulAndAutorId(String tytul, long autorId) { return ksiazkaRepository.existsByTytulAndAutorId(tytul, autorId);}
 
