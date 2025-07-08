@@ -36,7 +36,7 @@ public class AutorServiceTest {
     Ksiazka ksiazka = new Ksiazka();
     ksiazka.setAutor(autor);
     ksiazka.setTytul("Pan Tadeusz");
-    ksiazka.setId(1);
+    ksiazka.setId(1L);
     autor.getKsiazki().add(ksiazka);
 
     // mock behaviour tej metody dla repo
