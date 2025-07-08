@@ -1,15 +1,17 @@
 package com.example.rest_library.encje;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Autor {
 
     @Id
@@ -19,7 +21,12 @@ public class Autor {
     private String nazwisko;
 
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ksiazka> ksiazki;
+    private List<Ksiazka> ksiazki = new ArrayList<>();
 
+    public Autor(String imie, String nazwisko)
+    {
+        this.imie = imie;
+        this.nazwisko = nazwisko;
+    }
 
 }
