@@ -2,14 +2,11 @@ package com.example.rest_library.controllery;
 
 import com.example.rest_library.DTO.AutorDTO;
 import com.example.rest_library.encje.Autor;
-import com.example.rest_library.encje.Przeczytane;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.rest_library.serwisy.AutorService;
-
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
