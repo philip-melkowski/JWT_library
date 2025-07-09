@@ -22,7 +22,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/uzytkownicy")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class UzytkownikController {
     private final UzytkownikService uzytkownikService;
 
