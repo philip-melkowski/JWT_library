@@ -11,8 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,18 +43,16 @@ public class AutorServiceTest {
     assertEquals("Adam", dodany.getImie());
     assertEquals("Mickiewicz", dodany.getNazwisko());
     verify(autorRepository, times(1)).save(autor);
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    // autor juz obecny w bazie
+    @Test
+    public void addAutorTest2() {
+        Autor autor = new Autor("Adam", "Mickiewicz");
+        when(autorRepository.findByImieAndNazwisko(autor.getImie(), autor.getNazwisko())).thenReturn(Optional.of(autor));
+        assertThrows(IllegalStateException.class, () -> autorService.addAutorIfNotExists(autor));
+        verify(autorRepository, times(0)).save(autor);
+    }
+
 
 }
