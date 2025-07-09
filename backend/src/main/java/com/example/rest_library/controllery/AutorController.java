@@ -45,7 +45,7 @@ public class AutorController {
     }
 
     // 4. znajdz autora po imieniu i nazwisku - zakladamy ze nie ma powtorek
-    @GetMapping("szukajByImieNazwisko")
+    @GetMapping("/szukajByImieNazwisko")
     public ResponseEntity<AutorDTO> findByImieAndNazwisko(@RequestParam String imie, @RequestParam String nazwisko)
     {
         return autorService.findByImieAndNazwisko(imie, nazwisko).map(autor -> ResponseEntity.ok(new AutorDTO(autor))).orElse(ResponseEntity.notFound().build());
