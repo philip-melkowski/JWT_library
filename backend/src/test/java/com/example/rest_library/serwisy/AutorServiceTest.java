@@ -25,31 +25,32 @@ public class AutorServiceTest {
     @InjectMocks
     private AutorService autorService;
 
-    // wszystkie metody delegują 1:1 do repo, wiec testy niepotrzebne, dodane niektore zeby sie nauczyc MOCK testowania
 
-    // znajdz autora po ID ksiazki
-    // ten test jest bez sensu, bo juz metody w repo jest przetestowane, a nie ma dodatkowej logiki w service
+
+
+    // autora jeszcze nie ma w bazie
     @Test
-    public void findByKsiazkiId() {
+    public void addAutorTest1() {
 
     Autor autor = new Autor("Adam", "Mickiewicz");
-    Ksiazka ksiazka = new Ksiazka();
-    ksiazka.setAutor(autor);
-    ksiazka.setTytul("Pan Tadeusz");
-    ksiazka.setId(1L);
-    autor.getKsiazki().add(ksiazka);
-
     // mock behaviour tej metody dla repo
-    when(autorRepository.findByKsiazkiId(ksiazka.getId())).thenReturn(Optional.of(autor));
+    when(autorRepository.findByImieAndNazwisko(autor.getImie(), autor.getNazwisko())).thenReturn(Optional.empty());
+    when(autorRepository.save(autor)).thenReturn(new Autor("Adam", "Mickiewicz"));
 
     // when
-    Optional<Autor> autorOptional = autorService.findByKsiazkiId(ksiazka.getId());
+    Autor dodany = autorService.addAutorIfNotExists(autor);
 
-    // thenReturn
-    assertTrue(autorOptional.isPresent());
-    assertEquals(autorOptional.get().getImie(), "Adam");
-    assertEquals(autorOptional.get().getNazwisko(), "Mickiewicz");
-    verify(autorRepository, times(1)).findByKsiazkiId(ksiazka.getId());
+    //then
+    assertEquals("Adam", dodany.getImie());
+    assertEquals("Mickiewicz", dodany.getNazwisko());
+    verify(autorRepository, times(1)).save(autor);
+
+
+
+
+
+
+
 
 
 

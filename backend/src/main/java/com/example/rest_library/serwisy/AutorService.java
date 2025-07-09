@@ -50,4 +50,13 @@ public class AutorService {
 
     public Optional<Autor> findByKsiazkiId(Long id) {return autorRepository.findByKsiazkiId(id);}
 
+    public Autor addAutorIfNotExists(Autor autor)
+    {
+        if(findByImieAndNazwisko(autor.getImie(), autor.getNazwisko()).isPresent())
+        {
+            throw new IllegalStateException("Autor juz istnieje w bazie!");
+        }
+        return save(autor);
+    }
+
 }

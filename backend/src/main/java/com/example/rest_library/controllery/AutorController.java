@@ -55,12 +55,16 @@ public class AutorController {
     @PostMapping
     public ResponseEntity<Autor> addAutor(@RequestBody Autor autor)
     {
-        if(autorService.findByImieAndNazwisko(autor.getImie(), autor.getNazwisko()).isPresent())
+        try{
+            Autor savedAutor = autorService.addAutorIfNotExists(autor);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedAutor);
+
+        }
+        catch(IllegalStateException e)
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        Autor savedAutor = autorService.save(autor);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedAutor);
+
     }
 
     /*
